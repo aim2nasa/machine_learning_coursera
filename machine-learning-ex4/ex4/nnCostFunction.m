@@ -87,8 +87,7 @@ for i=1:m
   h = a3;
  
   %cost를 구하기 위한 작업들
-  K=size(h,1);
-  yy=zeros(K,1);
+  yy=zeros(num_labels,1);
   if y(i)==10
       yy(10)=1;
   else
