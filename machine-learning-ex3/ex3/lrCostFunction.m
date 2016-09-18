@@ -40,9 +40,18 @@ grad = zeros(size(theta));
 
 
 
+h=sigmoid(X*theta);
 
+n=size(theta)-1;
+tsq=theta.^2;
+reg=(lambda/(2*m))*(sum(tsq(2:end)));
 
+J=(1/m)*sum(-y.*log(h)-(1-y).*log(1-h)) + reg;
 
+filter=eye(size(theta,1));
+filter(1,1)=0;
+
+grad = (1/m)*(X'*(h-y))+(lambda/m)*(filter*theta);
 
 
 % =============================================================

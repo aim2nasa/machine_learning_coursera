@@ -30,9 +30,24 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
+labelp=zeros(m,num_labels);
 
+probvalue=0;
+for i=1:num_labels
+  theta = all_theta(i,:)';
+  tmp = sigmoid(X*theta);
+  labelp(:,i)=tmp;
+end
 
-
+for j=1:m
+  val=0;
+  for i=1:num_labels
+    if labelp(j,i)>val
+      val=labelp(j,i);
+      p(j) = i;
+    end
+  end
+end
 
 
 
