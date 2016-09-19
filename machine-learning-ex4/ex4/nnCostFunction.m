@@ -64,52 +64,32 @@ Theta2_grad = zeros(size(Theta2));
 
 
 
-
-
-
-
-
 X=[ones(m,1) X];
 
-delta_cap2 = 0;
-delta_cap1 = 0;
+a1 = X';
+z2 = Theta1*a1;
+a2 = sigmoid(z2);
 
-for i=1:m
-  %forward propagation
-  a1 = X(i,:)';
-  
-  z2 = Theta1*a1;
-  a2 = sigmoid(z2);
-  
-  a2 = [1; a2]; %add 1
-  z3 = Theta2*a2;
-  a3 = sigmoid(z3);
-  h = a3;
- 
-  %cost를 구하기 위한 작업들
-  yy=zeros(num_labels,1);
-  if y(i)==10
-      yy(10)=1;
-  else
-      yy(y(i))=1;
-  end 
-  
-  %backpropagation
-  delta_3 = h-yy;
-  delta_2 = Theta2(:,2:end)'*delta_3.*sigmoidGradient(z2);
-  
-  delta_cap2 = delta_cap2 + delta_3 * a2';
-  delta_cap1 = delta_cap1 + delta_2 * a1';
+a2 = [ones(m,1)'; a2];
+z3 = Theta2*a2;
+a3 = sigmoid(z3);
 
-% cost계산
-%   for k=1:K
-%       J = J + (-yy(k)*log(h(k))-(1-yy(k))*log(1-h(k)));
-%   end
-% 위의 for loop식을 아래의 벡터곱으로 변경
-  J = J + sum(-yy.*log(h)-(1-yy).*log(1-h));
+h = a3;
+
+yy=zeros(num_labels,m);
+for j=1:m
+    yy(y(j),j) = 1;
 end
-J = J/m;
 
+%backpropagation
+delta_3 = h-yy;
+delta_2 = Theta2(:,2:end)'*delta_3.*sigmoidGradient(z2);
+  
+delta_cap2 = delta_3 * a2';
+delta_cap1 = delta_2 * a1';
+
+J = (1/m)*sum(sum(-yy.*log(h)-(1-yy).*log(1-h)));
+    
 %Regularizing
 t1sq=Theta1.^2;
 t1sqr = sum(t1sq);   %theta1제곱하고 나온 25x401행렬을 칼럼별로 합한 결과 (1x401)
