@@ -22,6 +22,9 @@ grad = zeros(size(theta));
 h = X*theta;
 J = (1/(2*m))*sum((h-y).^2) + (lambda/(2*m))*(sum(theta(2:end).^2));
 
+filter=eye(size(theta,1));
+filter(1,1)=0;
+grad = (1/m)*(X'*(h-y)) + (lambda/m)*filter*theta;
 
 
 
