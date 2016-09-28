@@ -24,27 +24,27 @@ sigma = 0.3;
 %
 
 values=[ 0.01 0.03 0.1 0.3 1 3 10 30 ];
-error = 1000000;
+error = inf;
 
-for i=1:size(values,2)
-    for j=1:size(values,2)
-        model= svmTrain(X, y, values(i), @(x1, x2) gaussianKernel(x1,x2, values(j)));
+for cTmp = values;
+    for sigmaTmp = values; 
+        model= svmTrain(X, y, cTmp, @(x1, x2) gaussianKernel(x1,x2, sigmaTmp));
         predictions = svmPredict(model,Xval);
         new_error = mean(double(predictions ~= yval));
         
-        fprintf('C:%f sigma:%f new error:%f',values(i),values(j),new_error);
+        fprintf('C:%f sigma:%f new error:%f',cTmp,sigmaTmp,new_error);
         
         if new_error < error
             error = new_error;
-            C = values(i);
-            sigma = values(j);
+            C = cTmp;
+            sigma = sigmaTmp;
             fprintf(',optimal C:%f sigma:%f error:%f',C,sigma,error);
         end
         fprintf('\n');
     end
 end
 
-
+fprintf('-> Optimal C:%f Sigma:%f error:%f',C,sigma,error);
 
 
 % =========================================================================
