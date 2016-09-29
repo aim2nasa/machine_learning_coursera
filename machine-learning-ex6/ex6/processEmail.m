@@ -99,7 +99,12 @@ while ~isempty(email_contents)
 
 
 
-
+    for idx=1:length(vocabList)
+        %fprintf('vocab=%s\n',vocabList{idx});
+        if strcmp(str,vocabList{idx})==1
+            word_indices = [word_indices; idx];
+        end
+    end
 
 
 
