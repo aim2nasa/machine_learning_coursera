@@ -24,7 +24,8 @@ idx = zeros(size(X,1), 1);
 for i=1:size(X,1)
     dist = inf;
     for k=1:K    
-        normsq = (X(i,1)-centroids(k,1))^2 + (X(i,2)-centroids(k,2))^2;
+        diff = X(i,:)'-centroids(k,:)';
+        normsq = diff'*diff;
         if normsq < dist 
             dist = normsq;
             idx(i) = k;
