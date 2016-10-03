@@ -44,8 +44,29 @@ Theta_grad = zeros(size(Theta));
 diff2 = (X*Theta'-Y).^2;
 J = (1/2)*sum(diff2(R==1));
 
-X_grad = ((X*Theta'-Y).*R)*Theta;
-Theta_grad = ((X*Theta'-Y).*R)'*X;
+for i=1:num_movies,
+  for k=1:num_features,
+    for j=1:num_users,
+      if R(i, j) == 1,
+        X_grad(i, k) = ...
+          X_grad(i, k) + ...
+          ( ((Theta(j,:) * X(i,:)') - Y(i, j)) * Theta(j, k));
+      end
+    end
+  end
+end
+
+for j=1:num_users,
+  for k=1:num_features,
+    for i=1:num_movies,
+      if R(i, j) == 1,
+        Theta_grad(j, k) = ...
+          Theta_grad(j, k) + ...
+          ( ((Theta(j,:) * X(i,:)') - Y(i, j)) * X(i, k));
+      end
+    end
+  end
+end
 
 
 
