@@ -44,6 +44,21 @@ Theta_grad = zeros(size(Theta));
 diff2 = (X*Theta'-Y).^2;
 J = (1/2)*sum(diff2(R==1));
 
+% calculating gradient of x.
+for i=1:num_movies
+  idx = find(R(i, :)==1);    % users that have rated movie i.
+  Theta_tmp = Theta(idx, :); % user features of movie i.
+  Y_tmp = Y(i, idx);         % user's ratings of movie i.
+  X_grad(i, :) = (X(i, :)*Theta_tmp' - Y_tmp)*Theta_tmp;
+end
+
+% calculating gradient of theta.
+for j=1:num_users
+  idx = find(R(:, j)==1)'; % movies that have rated by user j.
+  X_tmp = X(idx, :);       % features of movies rated by user j.
+  Y_tmp = Y(idx, j);       % user ratings by user j.
+  Theta_grad(j, :) = (X_tmp*Theta(j, :)'-Y_tmp)'*X_tmp;
+end
 
 
 
